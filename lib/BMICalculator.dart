@@ -6,6 +6,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'MasterPage.dart';
 import 'Model/Gender.dart';
 
+Color buttonColor = Colors.white.withAlpha(450);
+
 class BMICalculator extends StatefulWidget {
   @override
   _BMICalculatorState createState() => _BMICalculatorState();
@@ -13,6 +15,8 @@ class BMICalculator extends StatefulWidget {
 
 class _BMICalculatorState extends State<BMICalculator> {
   int heightValue = 120;
+  int weightValue = 70;
+  int ageValue = 25;
 
   Color maleColor = Colors.deepOrangeAccent;
   Color femaleColor = Colors.deepOrangeAccent;
@@ -123,7 +127,7 @@ class _BMICalculatorState extends State<BMICalculator> {
                     data: SliderTheme.of(context).copyWith(
                       thumbShape:
                           RoundSliderThumbShape(enabledThumbRadius: 16.0),
-                      thumbColor: Colors.white.withAlpha(450),
+                      thumbColor: buttonColor,
                       overlayShape:
                           RoundSliderOverlayShape(overlayRadius: 26.0),
                       overlayColor: Color(0x29000000),
@@ -145,29 +149,99 @@ class _BMICalculatorState extends State<BMICalculator> {
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     new RoundedCards(
-                      headWidget: Icon(
-                        FontAwesomeIcons.mars,
-                        size: 80,
+                      headWidget: Column(
+                        children: <Widget>[
+                          Text(
+                            'Weight',
+                            style: pageMediumFontStyle,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
+                            children: <Widget>[
+                              Text(
+                                weightValue.toString(),
+                                style: pageLargeFontStyle,
+                              ),
+                              Text(
+                                'KG',
+                                style: pageSmallFontStyle,
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      contentWidget: Text(
-                        'Female',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      contentWidget: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          RoundIconButton(
+                              onPressed: () {
+                                setState(() {
+                                  weightValue++;
+                                });
+                              },
+                              buttonIcon: FontAwesomeIcons.plus),
+                          RoundIconButton(
+                              onPressed: () {
+                                setState(() {
+                                  weightValue--;
+                                });
+                              },
+                              buttonIcon: FontAwesomeIcons.minus),
+                        ],
                       ),
                     ),
                     new RoundedCards(
-                      headWidget: Icon(
-                        FontAwesomeIcons.venus,
-                        size: 80,
+                      headWidget: Column(
+                        children: <Widget>[
+                          Text(
+                            'Age',
+                            style: pageMediumFontStyle,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
+                            children: <Widget>[
+                              Text(
+                                ageValue.toString(),
+                                style: pageLargeFontStyle,
+                              ),
+                              Text(
+                                ' ',
+                                style: pageSmallFontStyle,
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      contentWidget: Text(
-                        'Female',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      contentWidget: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          RoundIconButton(
+                              onPressed: () {
+                                setState(() {
+                                  ageValue++;
+                                });
+                              },
+                              buttonIcon: FontAwesomeIcons.plus),
+                          RoundIconButton(
+                              onPressed: () {
+                                setState(() {
+                                  ageValue--;
+                                });
+                              },
+                              buttonIcon: FontAwesomeIcons.minus),
+                        ],
                       ),
                     ),
                   ],
@@ -178,6 +252,28 @@ class _BMICalculatorState extends State<BMICalculator> {
         ),
       ),
       floatingActionButton: null,
+    );
+  }
+}
+
+class RoundIconButton extends StatelessWidget {
+  final Function onPressed;
+  final IconData buttonIcon;
+
+  RoundIconButton({@required this.onPressed, @required this.buttonIcon});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+      child: RawMaterialButton(
+        child: Icon(buttonIcon),
+        shape: CircleBorder(),
+        fillColor: buttonColor,
+        constraints: BoxConstraints.tightFor(height: 56, width: 56),
+        elevation: 6.0,
+        onPressed: onPressed,
+      ),
     );
   }
 }
