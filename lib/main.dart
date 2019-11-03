@@ -1,16 +1,20 @@
-//import 'package:first_flutter_app/MyCard.dart';
-import 'package:flutter/material.dart';
-//import 'Dice.dart';
-import 'BMICalculator.dart';
-//import 'QuizPage.dart';
-//import 'Xylophone.dart';
-//import 'FirstFlutter.dart';
-
-//void main() => runApp((new FirstFlutter()));
+import 'package:first_flutter_app/BMICalculator.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:first_flutter_app/Dice.dart';
+import 'package:first_flutter_app/FirstFlutter.dart';
+import 'package:first_flutter_app/Home.dart';
+import 'package:first_flutter_app/MyCard.dart';
+import 'package:first_flutter_app/QuizPage.dart';
+import 'package:first_flutter_app/Xylophone.dart';
 
-void main() => runApp((MaterialApp(
+void main() => runApp(FirstFlutterApp());
+
+class FirstFlutterApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return (MaterialApp(
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -23,5 +27,15 @@ void main() => runApp((MaterialApp(
         accentColor: Colors.deepOrange,
       ),
       debugShowCheckedModeBanner: false,
-      home: BMICalculator(),
-    )));
+      home: Home(),
+      routes: {
+        '/Rich': (context) => FirstFlutter(),
+        '/Card': (context) => MyCard(),
+        '/Dice': (context) => DicePage(),
+        '/Xylophone': (context) => Xylophone(),
+        '/Quiz': (context) => QuizPage(),
+        '/BMI': (context) => BMICalculator(),
+      },
+    ));
+  }
+}

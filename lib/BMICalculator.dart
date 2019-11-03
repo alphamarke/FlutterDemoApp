@@ -6,7 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'MasterPage.dart';
 import 'Model/Gender.dart';
 
-Color buttonColor = Colors.white.withAlpha(450);
+Color buttonColor = Colors.black.withAlpha(400);
 
 class BMICalculator extends StatefulWidget {
   @override
