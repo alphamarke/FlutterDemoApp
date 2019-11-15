@@ -11,7 +11,7 @@ class _FirstFlutterState extends State<FirstFlutter> {
   @override
   Widget build(BuildContext context) {
     return new MasterPage(
-      appBarText: 'I am Rich',
+      appBarText: 'I am Rich ❤',
       scaffoldBody: Container(
         child: Center(
           child: Image(image: AssetImage('assets/money.png')),

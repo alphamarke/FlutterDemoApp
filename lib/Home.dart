@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:background_fetch/background_fetch.dart';
+import 'package:first_flutter_app/Climate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'MasterPage.dart';
@@ -23,7 +25,7 @@ class _HomeState extends State<Home> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                FlatButton(
+                RoundedButton(
                   color: buttonColor,
                   child: Text('I Am Rich'),
                   onPressed: () {
@@ -33,7 +35,7 @@ class _HomeState extends State<Home> {
                 SizedBox(
                   height: 15.0,
                 ),
-                FlatButton(
+                RoundedButton(
                   color: buttonColor,
                   child: Text('My Card'),
                   onPressed: () {
@@ -43,7 +45,7 @@ class _HomeState extends State<Home> {
                 SizedBox(
                   height: 15.0,
                 ),
-                FlatButton(
+                RoundedButton(
                   color: buttonColor,
                   child: Text('Roll the Dice'),
                   onPressed: () {
@@ -53,7 +55,7 @@ class _HomeState extends State<Home> {
                 SizedBox(
                   height: 15.0,
                 ),
-                FlatButton(
+                RoundedButton(
                   color: buttonColor,
                   child: Text('Xylophone'),
                   onPressed: () {
@@ -63,7 +65,7 @@ class _HomeState extends State<Home> {
                 SizedBox(
                   height: 15.0,
                 ),
-                FlatButton(
+                RoundedButton(
                   color: buttonColor,
                   child: Text('Quiz'),
                   onPressed: () {
@@ -73,11 +75,31 @@ class _HomeState extends State<Home> {
                 SizedBox(
                   height: 15.0,
                 ),
-                FlatButton(
+                RoundedButton(
                   color: buttonColor,
                   child: Text('BMI Calculator'),
                   onPressed: () {
                     Navigator.pushNamed(context, '/BMI');
+                  },
+                ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                RoundedButton(
+                  color: buttonColor,
+                  child: Text('Animation'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, Climate.id);
+                  },
+                ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                RoundedButton(
+                  color: buttonColor,
+                  child: Text('Background Fetch'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, BackgroundFetch.);
                   },
                 ),
                 SizedBox(
@@ -89,6 +111,26 @@ class _HomeState extends State<Home> {
         ),
       ),
       floatingActionButton: null,
+    );
+  }
+}
+
+class RoundedButton extends StatelessWidget {
+  final Function onPressed;
+  final Widget child;
+  final Color color;
+
+  RoundedButton({this.onPressed, this.child, this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      padding: EdgeInsets.all(10),
+      fillColor: color,
+      child: child,
+      onPressed: onPressed,
+      elevation: 20.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
     );
   }
 }
