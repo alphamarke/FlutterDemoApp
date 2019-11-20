@@ -18,6 +18,7 @@ dependencies:
   flushbar: ^1.9.1
   flare_splash_screen: ^3.0.0
   camera: ^0.5.6+3
+  video_player: ^0.10.2+5
   flutter_localizations:
     sdk: flutter
   flutter_cupertino_localizations: ^1.0.1
