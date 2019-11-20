@@ -1,5 +1,6 @@
 import 'package:first_flutter_app/BMICalculator.dart';
 import 'package:first_flutter_app/BackgroundFetch.dart';
+import 'package:first_flutter_app/Camera.dart';
 import 'package:first_flutter_app/Climate.dart';
 import 'package:first_flutter_app/FlushBar.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -44,6 +45,7 @@ class FirstFlutterApp extends StatelessWidget {
         Climate.id: (context) => Climate(),
         BackgroundFetchPage.id: (context) => BackgroundFetchPage(),
         FlushBarPage.id: (context) => FlushBarPage(),
+        CameraApp.id: (context) => CameraApp(),
       },
     ));
   }
