@@ -1,6 +1,7 @@
-import 'package:background_fetch/background_fetch.dart';
 import 'package:first_flutter_app/BMICalculator.dart';
+import 'package:first_flutter_app/BackgroundFetch.dart';
 import 'package:first_flutter_app/Climate.dart';
+import 'package:first_flutter_app/FlushBar.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,15 +11,10 @@ import 'package:first_flutter_app/Home.dart';
 import 'package:first_flutter_app/MyCard.dart';
 import 'package:first_flutter_app/QuizPage.dart';
 import 'package:first_flutter_app/Xylophone.dart';
-
-void backgroundFetchHeadlessTask() async {
-  print('[BackgroundFetch] Headless event received.');
-  BackgroundFetch.finish();
-}
+import 'package:flare_splash_screen/flare_splash_screen.dart';
 
 void main() {
   runApp(FirstFlutterApp());
-  BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
 }
 
 class FirstFlutterApp extends StatelessWidget {
@@ -46,6 +42,8 @@ class FirstFlutterApp extends StatelessWidget {
         '/Quiz': (context) => QuizPage(),
         '/BMI': (context) => BMICalculator(),
         Climate.id: (context) => Climate(),
+        BackgroundFetchPage.id: (context) => BackgroundFetchPage(),
+        FlushBarPage.id: (context) => FlushBarPage(),
       },
     ));
   }

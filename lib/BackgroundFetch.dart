@@ -1,85 +1,51 @@
-import 'package:background_fetch/background_fetch.dart';
-import 'package:flutter/cupertino.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'MasterPage.dart';
+import 'package:flutter/services.dart';
 
-class MyCard extends StatefulWidget {
-  static String id = 'BackgroundFetch';
+import 'package:background_fetch/background_fetch.dart';
 
-  @override
-  _MyCardState createState() => _MyCardState();
+/// This "Headless Task" is run when app is terminated.
+void backgroundFetchHeadlessTask() async {
+  print('[BackgroundFetch] Headless event received.');
+  BackgroundFetch.finish();
 }
 
-class _MyCardState extends State<MyCard> {
+void main() {
+  // Enable integration testing with the Flutter Driver extension.
+  // See https://flutter.io/testing/ for more info.
+  runApp(new BackgroundFetchPage());
+
+  // Register to receive BackgroundFetch events after app is terminated.
+  // Requires {stopOnTerminate: false, enableHeadless: true}
+  BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+}
+
+class BackgroundFetchPage extends StatefulWidget {
+  static String id = 'BackgroundFetchPage';
+  @override
+  _BackgroundFetchPageState createState() => new _BackgroundFetchPageState();
+}
+
+class _BackgroundFetchPageState extends State<BackgroundFetchPage> {
   bool _enabled = true;
   int _status = 0;
   List<DateTime> _events = [];
 
   @override
-  Widget build(BuildContext context) {
-    return new MasterPage(
-      appBarText: 'My Card',
-      scaffoldBody: Container(
-        child: Column(
-          children: <Widget>[
-            Switch(value: _enabled, onChanged: _onClickEnable),
-            RaisedButton(onPressed: _onClickStatus, child: Text('Status')),
-            Container(
-                child: Text("$_status"), margin: EdgeInsets.only(left: 20.0)),
-            new ListView.builder(
-                itemCount: _events.length,
-                itemBuilder: (BuildContext context, int index) {
-                  DateTime timestamp = _events[index];
-                  return InputDecorator(
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(
-                              left: 10.0, top: 10.0, bottom: 0.0),
-                          labelStyle: TextStyle(
-                              color: Colors.amberAccent, fontSize: 20.0),
-                          labelText: "[background fetch event]"),
-                      child: new Text(timestamp.toString(),
-                          style:
-                              TextStyle(color: Colors.white, fontSize: 16.0)));
-                }),
-          ],
-        ),
-      ),
-      floatingActionButton: null,
-    );
+  void initState() {
+    super.initState();
+    initPlatformState();
   }
 
-  void _onClickEnable(enabled) {
-    setState(() {
-      _enabled = enabled;
-    });
-    if (enabled) {
-      BackgroundFetch.start().then((int status) {
-        print('[BackgroundFetch] start success: $status');
-      }).catchError((e) {
-        print('[BackgroundFetch] start FAILURE: $e');
-      });
-    } else {
-      BackgroundFetch.stop().then((int status) {
-        print('[BackgroundFetch] stop success: $status');
-      });
-    }
-  }
-
-  void _onClickStatus() async {
-    int status = await BackgroundFetch.status;
-    print('[BackgroundFetch] status: $status');
-    setState(() {
-      _status = status;
-    });
-  }
-
+  // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     // Configure BackgroundFetch.
     BackgroundFetch.configure(
         BackgroundFetchConfig(
-            minimumFetchInterval: 15,
-            stopOnTerminate: false,
-            enableHeadless: false), () async {
+          minimumFetchInterval: 15,
+          stopOnTerminate: false,
+          enableHeadless: false,
+        ), () async {
       // This is the fetch-event callback.
       print('[BackgroundFetch] Event received');
       setState(() {
@@ -110,5 +76,69 @@ class _MyCardState extends State<MyCard> {
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
+  }
+
+  void _onClickEnable(enabled) {
+    setState(() {
+      _enabled = enabled;
+    });
+    if (enabled) {
+      BackgroundFetch.start().then((int status) {
+        print('[BackgroundFetch] start success: $status');
+      }).catchError((e) {
+        print('[BackgroundFetch] start FAILURE: $e');
+      });
+    } else {
+      BackgroundFetch.stop().then((int status) {
+        print('[BackgroundFetch] stop success: $status');
+      });
+    }
+  }
+
+  void _onClickStatus() async {
+    int status = await BackgroundFetch.status;
+    print('[BackgroundFetch] status: $status');
+    setState(() {
+      _status = status;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+      home: new Scaffold(
+        appBar: new AppBar(
+            title: const Text('BackgroundFetch Example',
+                style: TextStyle(color: Colors.black)),
+            backgroundColor: Colors.amberAccent,
+            brightness: Brightness.light,
+            actions: <Widget>[
+              Switch(value: _enabled, onChanged: _onClickEnable),
+            ]),
+        body: Container(
+          color: Colors.black,
+          child: new ListView.builder(
+              itemCount: _events.length,
+              itemBuilder: (BuildContext context, int index) {
+                DateTime timestamp = _events[index];
+                return InputDecorator(
+                    decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.only(left: 10.0, top: 10.0, bottom: 0.0),
+                        labelStyle: TextStyle(
+                            color: Colors.amberAccent, fontSize: 20.0),
+                        labelText: "[background fetch event]"),
+                    child: new Text(timestamp.toString(),
+                        style: TextStyle(color: Colors.white, fontSize: 16.0)));
+              }),
+        ),
+        bottomNavigationBar: BottomAppBar(
+            child: Row(children: <Widget>[
+          RaisedButton(onPressed: _onClickStatus, child: Text('Status')),
+          Container(
+              child: Text("$_status"), margin: EdgeInsets.only(left: 20.0))
+        ])),
+      ),
+    );
   }
 }

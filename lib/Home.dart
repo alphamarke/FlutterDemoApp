@@ -1,9 +1,12 @@
 import 'dart:math';
 
 import 'package:background_fetch/background_fetch.dart';
+import 'package:first_flutter_app/BackgroundFetch.dart';
 import 'package:first_flutter_app/Climate.dart';
+import 'package:first_flutter_app/FlushBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'CustomControls/RoundedButton.dart';
 import 'MasterPage.dart';
 
 Color buttonColor = Colors.black.withAlpha(400);
@@ -99,7 +102,17 @@ class _HomeState extends State<Home> {
                   color: buttonColor,
                   child: Text('Background Fetch'),
                   onPressed: () {
-                    Navigator.pushNamed(context, BackgroundFetch.);
+                    Navigator.pushNamed(context, BackgroundFetchPage.id);
+                  },
+                ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                RoundedButton(
+                  color: buttonColor,
+                  child: Text('Flush Bar'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, FlushBarPage.id);
                   },
                 ),
                 SizedBox(
@@ -111,26 +124,6 @@ class _HomeState extends State<Home> {
         ),
       ),
       floatingActionButton: null,
-    );
-  }
-}
-
-class RoundedButton extends StatelessWidget {
-  final Function onPressed;
-  final Widget child;
-  final Color color;
-
-  RoundedButton({this.onPressed, this.child, this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return RawMaterialButton(
-      padding: EdgeInsets.all(10),
-      fillColor: color,
-      child: child,
-      onPressed: onPressed,
-      elevation: 20.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
     );
   }
 }
