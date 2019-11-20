@@ -468,6 +468,7 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
 List<CameraDescription> cameras;
 
 class CameraApp extends StatelessWidget {
+  static String id = 'CameraApp';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
