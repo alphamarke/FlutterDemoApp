@@ -13,6 +13,11 @@ import 'package:first_flutter_app/MyCard.dart';
 import 'package:first_flutter_app/QuizPage.dart';
 import 'package:first_flutter_app/Xylophone.dart';
 import 'package:flare_splash_screen/flare_splash_screen.dart';
+import 'package:google_map_location_picker/generated/i18n.dart'
+    as location_picker;
+import 'package:first_flutter_app/Utils/i18n.dart';
+
+import 'LocationPage.dart';
 
 void main() {
   runApp(FirstFlutterApp());
@@ -23,11 +28,17 @@ class FirstFlutterApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return (MaterialApp(
       localizationsDelegates: [
+        location_picker.S.delegate,
+        S.delegate,
+        GlobalCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
       locale: const Locale('en'),
-      supportedLocales: const <Locale>[const Locale('en')],
+      supportedLocales: const <Locale>[
+        Locale('en', ''),
+        Locale('ar', ''),
+      ],
       theme: ThemeData.dark().copyWith(
         primaryColor: Colors.grey[800],
         scaffoldBackgroundColor: Colors.grey[700],
@@ -46,6 +57,7 @@ class FirstFlutterApp extends StatelessWidget {
         BackgroundFetchPage.id: (context) => BackgroundFetchPage(),
         FlushBarPage.id: (context) => FlushBarPage(),
         CameraApp.id: (context) => CameraApp(),
+        LocationPage.id: (context) => LocationPage(),
       },
     ));
   }
