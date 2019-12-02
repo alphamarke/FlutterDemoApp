@@ -64,12 +64,6 @@ class _ClimateState extends State<Climate> with TickerProviderStateMixin {
     });
   }
 
-  void checkLocation() async {
-    //Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
-    //print(position);
-  }
-
   @override
   Widget build(BuildContext context) {
     return new MasterPage(
