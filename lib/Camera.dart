@@ -4,11 +4,17 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:video_player/video_player.dart';
+
+import 'ImagePicker.dart';
+import 'MediaPicker.dart';
 
 class CameraExampleHome extends StatefulWidget {
   @override
@@ -43,10 +49,14 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
   bool enableAudio = true;
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsFlutterBinding.ensureInitialized();
+    getAvailableCameras();
+  }
+
+  void getAvailableCameras() async {
     cameras = await availableCameras();
   }
 
@@ -109,7 +119,7 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 _cameraTogglesRowWidget(),
-                _thumbnailWidget(),
+                _thumbnailWidget(context),
               ],
             ),
           ),
@@ -159,34 +169,41 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
   }
 
   /// Display the thumbnail of the captured image or video.
-  Widget _thumbnailWidget() {
+  Widget _thumbnailWidget(context) {
     return Expanded(
       child: Align(
         alignment: Alignment.centerRight,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            videoController == null && imagePath == null
-                ? Container()
-                : SizedBox(
-                    child: (videoController == null)
-                        ? Image.file(File(imagePath))
-                        : Container(
-                            child: Center(
-                              child: AspectRatio(
-                                  aspectRatio:
-                                      videoController.value.size != null
-                                          ? videoController.value.aspectRatio
-                                          : 1.0,
-                                  child: VideoPlayer(videoController)),
+        child: GestureDetector(
+          onTap: () {
+            print('clicked');
+            //Navigator.pushNamed(context, ImagePickerPage.id);
+            Navigator.pushNamed(context, MediaPickerPage.id);
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              videoController == null && imagePath == null
+                  ? Container()
+                  : SizedBox(
+                      child: (videoController == null)
+                          ? Image.file(File(imagePath))
+                          : Container(
+                              child: Center(
+                                child: AspectRatio(
+                                    aspectRatio:
+                                        videoController.value.size != null
+                                            ? videoController.value.aspectRatio
+                                            : 1.0,
+                                    child: VideoPlayer(videoController)),
+                              ),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.pink)),
                             ),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.pink)),
-                          ),
-                    width: 64.0,
-                    height: 64.0,
-                  ),
-          ],
+                      width: 64.0,
+                      height: 64.0,
+                    ),
+            ],
+          ),
         ),
       ),
     );
@@ -246,7 +263,7 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
   Widget _cameraTogglesRowWidget() {
     final List<Widget> toggles = <Widget>[];
 
-    if (cameras.isEmpty) {
+    if (cameras != null && cameras.isEmpty) {
       return const Text('No camera found');
     } else {
       for (CameraDescription cameraDescription in cameras) {
@@ -309,12 +326,23 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
       if (mounted) {
         setState(() {
           imagePath = filePath;
+          print('Image path : ' + imagePath);
+
+          saveToGallery(filePath);
           videoController?.dispose();
           videoController = null;
         });
         if (filePath != null) showInSnackBar('Picture saved to $filePath');
       }
     });
+  }
+
+  void saveToGallery(filePath) async {
+    Map<PermissionGroup, PermissionStatus> permissions =
+        await PermissionHandler().requestPermissions([PermissionGroup.storage]);
+
+    final result = await ImageGallerySaver.saveFile(filePath);
+    print('Saving Image To Gallery : ' + result);
   }
 
   void onVideoRecordButtonPressed() {
@@ -471,8 +499,6 @@ class CameraApp extends StatelessWidget {
   static String id = 'CameraApp';
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: CameraExampleHome(),
-    );
+    return CameraExampleHome();
   }
 }

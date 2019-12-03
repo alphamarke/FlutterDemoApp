@@ -17,7 +17,9 @@ import 'package:google_map_location_picker/generated/i18n.dart'
     as location_picker;
 import 'package:first_flutter_app/Utils/i18n.dart';
 
+import 'ImagePicker.dart';
 import 'LocationPage.dart';
+import 'MediaPicker.dart';
 
 void main() {
   runApp(FirstFlutterApp());
@@ -57,6 +59,8 @@ class FirstFlutterApp extends StatelessWidget {
         BackgroundFetchPage.id: (context) => BackgroundFetchPage(),
         FlushBarPage.id: (context) => FlushBarPage(),
         CameraApp.id: (context) => CameraApp(),
+        ImagePickerPage.id: (context) => ImagePickerPage(),
+        MediaPickerPage.id: (context) => MediaPickerPage(),
         LocationPage.id: (context) => LocationPage(),
       },
     ));
